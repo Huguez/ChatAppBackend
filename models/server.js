@@ -3,9 +3,12 @@ const express  = require('express');
 const http     = require('http');
 const socketio = require('socket.io');
 const path     = require('path');
+const cors     = require("cors")
 
 const Sockets  = require('./sockets');
 const dbConnection = require('../databases/config');
+
+const authPath = require( "../routers/auth" )
 
 class Server {
 
@@ -24,9 +27,19 @@ class Server {
         this.io = socketio( this.server, { /* configuraciones */ } );
     }
 
+    #routes(){
+        this.app.use( "/auth", authPath )
+    }
+
     middlewares() {
         // Desplegar el directorio público
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
+
+        //cors
+        this.app.use( cors() );
+
+        //parse json
+        this.app.use( express.json() );
     }
 
     // Esta configuración se puede tener aquí o como propieda de clase
@@ -39,6 +52,9 @@ class Server {
 
         // Inicializar Middlewares
         this.middlewares();
+        
+        // set routes
+        this.#routes()
 
         // Inicializar sockets
         this.configurarSockets();

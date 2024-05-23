@@ -2,13 +2,15 @@ const { default: mongoose } = require("mongoose");
 
 const dbConnection = async () => {
    try {
-      const { MONGODB_HOST, DATABASE, ADMIN, PASSWORD, MONGODB_PORT } = process.env
+      const { DATABASE, NODE_ENV, MONGODB_PORT, URI } = process.env
 
-      const cnn = `mongodb://${ ADMIN }:${ PASSWORD }@${ MONGODB_HOST }:${ MONGODB_PORT }/${ DATABASE }`
-
-      await mongoose.connect( cnn, {} )
-
-      console.log( "DB Connect !!!" );
+      const cnn = NODE_ENV === "development" ? `mongodb://localhost:${ MONGODB_PORT }/${ DATABASE }` : URI
+      
+      mongoose.connect( cnn, {} ).then( () => {
+         console.log( "DB Connect !!!" );
+      } ).catch( err => {
+         console.log( err );
+      } )
 
    } catch ( error ) {
       console.log( error );

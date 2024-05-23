@@ -1,21 +1,28 @@
-version: '3.7'
+version: '3'
 
 services:
   mongodb:
     image: mongo:8.0.0-rc4
-    hostname: ${MONGODB_HOST}
-    container_name: ChatAppDB
-    command:
-      - --storageEngine
-      - wiredTiger
-      - --auth
-    volumes:
-      - ./data:/data/db
-      - ./mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${ADMIN}
-      - MONGO_INITDB_ROOT_PASSWORD=${PASSWORD}
-      - MONGO_INITDB_DATABASE=${DATABASE}
+    container_name: mongodb
     ports:
-      - 27017:27017
-    env_file: .env
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mongodb_network
+  mongo-client:
+    image: mongo-express:1.0.2-20
+    container_name: mongo-client
+    depends_on:
+      - mongodb
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=${MONGODB_PORT}
+    ports:
+      - 8081:8081
+    networks:
+      - mongodb_network
+volumes:
+  mongodb_data:
+networks:
+  mongodb_network:

@@ -8,7 +8,7 @@ const User = Schema({
    email: {
       type: Schema.Types.String,
       required: true,
-      uniquie: true,
+      unique: true,
    },
    password: {
       type: Schema.Types.String,
@@ -19,15 +19,17 @@ const User = Schema({
       default: false
    },
    status: {
-      type: [ 'active', 'banned', 'unverified' ],
+      type: Schema.Types.String,
+      enum: ['active', 'banned', 'unverified'],
       required: false,
+      default: 'active', //unverified
    },
 }, { 
-   timestamps: true
+   timestamps: true,
 } )
 
-User.method( "toJSON", function(){
-   const { __v, _id, ...obj } = this.toObject()
+User.method( "toJSON", function( doc, ret ){
+   const { __v, _id, password, ...obj } = this.toObject()
    obj.uid = _id
    return obj
 } )

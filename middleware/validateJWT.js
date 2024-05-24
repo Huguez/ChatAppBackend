@@ -2,7 +2,7 @@ const { verify, TokenExpiredError } = require("jsonwebtoken")
 
 const validateJWT = ( req, res, next ) => {
    try{
-      const token = req.header("token")
+      const token = req.header("x-token")
 
       if( !token ){
          return res.status( 401 ).json( {
@@ -17,7 +17,7 @@ const validateJWT = ( req, res, next ) => {
 
       req.uid = payload.uid
 
-      next()
+      return next()
    } catch( error ) {
       console.log( error );
 

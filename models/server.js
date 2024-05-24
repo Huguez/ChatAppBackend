@@ -9,6 +9,7 @@ const Sockets  = require('./sockets');
 const dbConnection = require('../databases/config');
 
 const authPath = require( "../routers/auth" )
+const messagePath = require( "../routers/message" )
 
 class Server {
 
@@ -28,6 +29,7 @@ class Server {
     }
 
     #routes(){
+        this.app.use( "/message", messagePath )
         this.app.use( "/auth", authPath )
     }
 

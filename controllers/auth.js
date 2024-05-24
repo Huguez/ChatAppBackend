@@ -77,7 +77,7 @@ const register = async ( req, res ) => {
 const renew = async ( req, res ) => {
    try {
       const uid = req.uid
-
+      
       const user = await User.findOne( { _id: uid } )
       
       if ( !user ) {

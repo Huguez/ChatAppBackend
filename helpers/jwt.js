@@ -1,4 +1,4 @@
-const { sign } = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 
 const generateJWT = ( uid ) => {
    try {
@@ -25,7 +25,18 @@ const generateJWT = ( uid ) => {
    }
 }
 
+const checkJWT = ( token = '' ) => {
+   try{
+      const secret = process.env.SECRET_JWT
+      const { uid } = verify( token, secret )
+      return uid
+   }catch( error ){
+      console.log( error );
+      return null
+   }
+}
+
 module.exports = {
    generateJWT,
-
+   checkJWT,
 }

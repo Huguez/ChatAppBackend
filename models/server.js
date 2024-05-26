@@ -29,8 +29,8 @@ class Server {
     }
 
     #routes(){
-        this.app.use( "/message", messagePath )
         this.app.use( "/auth", authPath )
+        this.app.use( "/message", messagePath )
     }
 
     middlewares() {

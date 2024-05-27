@@ -1,5 +1,5 @@
 const { checkJWT } = require("../helpers/jwt")
-const { userConnected, userDisconnected, getUsers } = require("../controllers/socket")
+const { userConnected, userDisconnected, getUsers, saveMsg } = require("../controllers/socket")
 
 class Sockets {
 
@@ -24,9 +24,23 @@ class Sockets {
 
             await userConnected( uid )
 
+            socket.join( uid );
+
+
+
+
             // Emit all connected users  
             this.io.emit( "list-users", await getUsers( uid ) )
 
+            // user sent message another
+
+            // user received
+            socket.on( "send-msg", async ( payload ) => {
+                const msg = await saveMsg( payload )
+
+                this.io.to( msg.to.toString() ).emit( "send-msg", msg )
+                this.io.to( msg.from.toString() ).emit( "send-msg", msg )
+            } )
 
             // user disconnected 
             socket.on( "disconnect", async () => {

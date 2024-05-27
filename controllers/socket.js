@@ -25,7 +25,20 @@ const userDisconnected =  async ( uid ) => {
    }
 }
 
+const getUsers = async () => {
+   try {
+      const allUsers = await User.find( {} ).sort( { online: "desc" } )
+      
+      return allUsers
+   }catch( error ){
+      console.log( error );
+      return []
+   }
+}
+
+
 module.exports = {
    userConnected,
    userDisconnected,
+   getUsers,
 }

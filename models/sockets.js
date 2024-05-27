@@ -1,5 +1,5 @@
 const { checkJWT } = require("../helpers/jwt")
-const { userConnected, userDisconnected } = require("../controllers/socket")
+const { userConnected, userDisconnected, getUsers } = require("../controllers/socket")
 
 class Sockets {
 
@@ -14,6 +14,7 @@ class Sockets {
         // On connection
         this.io.on('connection', async ( socket ) => {
             
+            // user connected 
             const token = socket.handshake.query["x-token"]
             const uid = checkJWT( token )
             
@@ -23,8 +24,14 @@ class Sockets {
 
             await userConnected( uid )
 
+            // Emit all connected users  
+            this.io.emit( "list-users", await getUsers( uid ) )
+
+
+            // user disconnected 
             socket.on( "disconnect", async () => {
                 await userDisconnected( uid )
+                this.io.emit( "list-users", await getUsers() )
             } ) 
         });
     }

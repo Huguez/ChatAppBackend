@@ -27,8 +27,13 @@ const generateJWT = ( uid ) => {
 
 const checkJWT = ( token = '' ) => {
    try{
+      if ( token === '' ) {
+         return null
+      }
       const secret = process.env.SECRET_JWT
+
       const { uid } = verify( token, secret )
+      
       return uid
    }catch( error ){
       console.log( error );

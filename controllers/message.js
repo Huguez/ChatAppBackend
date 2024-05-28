@@ -10,12 +10,10 @@ const getChatbyUser = async ( req, res ) => {
             { from: myID, to: toID },
             { from: toID, to: myID },
          ]
-      } ).limit( 30 ).sort( { createdAt: "desc" } )
-      // 664fe25eb3fccb335c817df5
+      } ).limit( 30 ).sort( { createdAt: "asc" } )
+      
       return res.status( 200 ).json( {
          ok: true,
-         toID,
-         myID,
          chat,
       } )
 

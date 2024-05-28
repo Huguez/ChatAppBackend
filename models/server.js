@@ -37,11 +37,11 @@ class Server {
         // Desplegar el directorio público
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
 
-        //cors
-        this.app.use( cors() );
-
         //parse json
         this.app.use( express.json() );
+        
+        //cors
+        this.app.use( cors() );
     }
 
     // Esta configuración se puede tener aquí o como propieda de clase

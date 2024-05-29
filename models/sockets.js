@@ -38,8 +38,8 @@ class Sockets {
             socket.on( "send-msg", async ( payload ) => {
                 const msg = await saveMsg( payload )
 
-                this.io.to( msg.to.toString() ).emit( "send-msg", msg )
                 this.io.to( msg.from.toString() ).emit( "send-msg", msg )
+                this.io.to( msg.to.toString() ).emit( "send-msg", msg )
             } )
 
             // user disconnected 
